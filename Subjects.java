@@ -6,6 +6,7 @@ package com.mycompany.imperialenrollmentsysten;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
 /**
  *
  * @author lajimperial
@@ -68,4 +69,28 @@ public ResultSet LoadSubjectRecords(){
         return null;
     }
 
-}}
+}
+// In Subjects.java
+public ResultSet LoadClassList(int subjectId) {
+    try {
+        // SQL query: Join 'students' and 'enrollments' tables to get student details for the subject
+        String query = "SELECT * " +
+                       "FROM students s " +
+                       "INNER JOIN enroll e ON s.studentID = e.studid " +
+                       "WHERE e.subjid = ?";
+        
+        // Prepare the statement (safer than raw SQL to prevent injection)
+        PreparedStatement pst = a.con.prepareStatement(query);  // 'con' is your DB connection (assuming it's already set up)
+        pst.setInt(1, subjectId);  // Set the subject ID parameter
+        
+        // Execute and return the results
+        return pst.executeQuery();
+    } catch (SQLException e) {
+        // Handle errors (e.g., DB connection issues)
+        JOptionPane.showMessageDialog(null, "Error loading class list: " + e.getMessage());
+        return null;
+    }
+}
+
+
+}

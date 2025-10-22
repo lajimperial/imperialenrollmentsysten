@@ -580,6 +580,7 @@ public class StudentsForm extends javax.swing.JFrame {
 
             // refresh enrolled subjects
             ShowEnrollRec(studid);
+            
         } else {
             JOptionPane.showMessageDialog(this, "Enrollment canceled.");
         }

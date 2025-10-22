@@ -74,6 +74,8 @@ public class SubjectForm extends javax.swing.JFrame {
         Save = new javax.swing.JButton();
         Delete = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        classtable = new javax.swing.JTable();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jRadioButtonMenuItem4 = new javax.swing.JRadioButtonMenuItem();
@@ -406,6 +408,24 @@ public class SubjectForm extends javax.swing.JFrame {
         jLabel16.setText("Subject ID");
         jLabel16.setToolTipText("");
 
+        classtable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Name", "Address", "Contact", "Email", "Gender", "Year"
+            }
+        ));
+        classtable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                classtableMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(classtable);
+
         jMenu3.setText("FORM");
 
         jRadioButtonMenuItem4.setSelected(true);
@@ -462,12 +482,13 @@ public class SubjectForm extends javax.swing.JFrame {
                                     .addComponent(SUBUNITS, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(SUBsched, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(395, 395, 395)
                         .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 867, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,9 +517,13 @@ public class SubjectForm extends javax.swing.JFrame {
                             .addComponent(SUBsched, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
@@ -552,6 +577,8 @@ public class SubjectForm extends javax.swing.JFrame {
         SUBUNITS.setText(jTable2.getValueAt(row, 3).toString());
         SUBsched.setText(jTable2.getValueAt(row, 4).toString());
     }
+    
+    loadClassList(Integer.valueOf(SUBid.getText()));
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveActionPerformed
@@ -620,6 +647,32 @@ private void loadRecord() {
       }
     }//GEN-LAST:event_EditActionPerformed
 
+    private void classtableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_classtableMouseClicked
+   
+    }//GEN-LAST:event_classtableMouseClicked
+private void loadClassList(int subjectId) {
+    DefaultTableModel tblmodel = (DefaultTableModel) classtable.getModel();
+    tblmodel.setRowCount(0);  // Clear previous data
+    
+    try {
+        ResultSet rs = a.LoadClassList(subjectId);  // 'a' is your Subjects instance
+        while (rs.next()) {
+            String studentID = rs.getString("studentID");
+            String name = rs.getString("Name");
+            String address = rs.getString("Address");
+            String contact = rs.getString("Contact");
+            String email = rs.getString("Email");
+            String gender = rs.getString("Gender");
+            String yearLvl = rs.getString("yearLvl");
+            
+            String[] data = {studentID, name, address, contact, email, gender, yearLvl};
+            tblmodel.addRow(data);
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error fetching class list: " + e.getMessage());
+    }
+}
+
     /**
      * @param args the command line arguments
      */
@@ -669,6 +722,7 @@ private void loadRecord() {
     private javax.swing.JTextField SUBid;
     private javax.swing.JTextField SUBsched;
     private javax.swing.JButton Save;
+    private javax.swing.JTable classtable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -703,6 +757,7 @@ private void loadRecord() {
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTable jTable1;
